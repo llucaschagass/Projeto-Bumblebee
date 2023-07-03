@@ -1,0 +1,163 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #ffffff;
+}
+
+h1 {
+  font-size: 4em;
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  left: 75px;
+  color: #FF862F;
+}
+
+h2 {
+  font-size: 4em;
+  text-align: center;
+  bottom: 0;
+  left: 75px;
+  color: #FF862F;
+}
+
+h3 {
+  font-size: 3em;
+  text-align: center;
+  top: center;
+  color: #FF862F;
+}
+
+p {
+  font-size: 25px;
+}
+
+nav {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  bottom: 10px;
+}
+
+nav a {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+img[src="src/images/logo.png"] {
+  width: 300px;
+  height: auto;
+  position: absolute;
+  top: 5px;
+  left: 55px;
+}
+
+img[src="src/images/carro2.png"] {
+  width: 800px;
+  height: auto;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+img[src="src/images/construction.png"] {
+  width: 500px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  text-decoration: none;
+}
+
+.btn-large {
+  font-size: 24px;
+  padding: 10px 20px;
+  width: 200px;
+  background-color: #FBBE28;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  margin: 10px;
+}
+
+form {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 50px;
+}
+
+.form-control {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: orange;
+  color: white;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+label {
+  background-color: laranja;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.form-label, input {
+  background-color: #FF862F;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+
+img#cabecalho {
+  width: 100%;
+  max-width: 1500px;
+  border: none;
+}
+
+.button-container a {
+  color: white;
+  text-decoration: none;
+}
+
+.button-container a:hover {
+  border-bottom: none;
+}
+
+#woman {
+  width: 480px;
+  left: 0;
+
+}
+
+#man{
+  width: 580px;
+  position: absolute;
+  right: 0;
+}
+
+#inferior1{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+
+
+
