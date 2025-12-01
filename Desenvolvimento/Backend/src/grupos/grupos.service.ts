@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { UpdateGrupoDto } from './dto/update-grupo.dto';
 import { PrismaService } from '../prisma.service';
@@ -13,29 +13,95 @@ export class GruposService {
     });
   }
 
-  findAll() {
-    return this.prisma.grupo.findMany({
-      include: { modelos: true }
+  async findAll() {
+    // Busca grupos com hierarquia completa para cálculos
+    const grupos = await this.prisma.grupo.findMany({
+      orderBy: { id: 'asc' },
+      include: {
+        modelos: {
+          include: {
+            veiculos: {
+              include: {
+                reservas: {
+                  where: {
+                    status: 'ATIVA',
+                    dataInicio: { lte: new Date() },
+                    dataFim: { gte: new Date() }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
+
+    return grupos.map(grupo => this.formatarGrupo(grupo));
   }
 
-  findOne(id: number) {
-    return this.prisma.grupo.findUnique({
+  async findOne(id: number) {
+    const grupo = await this.prisma.grupo.findUnique({
       where: { id },
-      include: { modelos: true }
+      include: {
+        modelos: {
+          include: {
+            veiculos: {
+              include: {
+                reservas: {
+                  where: {
+                    status: 'ATIVA',
+                    dataInicio: { lte: new Date() },
+                    dataFim: { gte: new Date() }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
+
+    if (!grupo) {
+      throw new NotFoundException(`Grupo com ID ${id} não encontrado.`);
+    }
+
+    return this.formatarGrupo(grupo);
   }
 
-  update(id: number, updateGrupoDto: UpdateGrupoDto) {
+  async update(id: number, updateGrupoDto: UpdateGrupoDto) {
+    await this.findOne(id); // Garante que existe
+
     return this.prisma.grupo.update({
       where: { id },
       data: updateGrupoDto,
     });
   }
 
-  remove(id: number) {
-    return this.prisma.grupo.delete({
-      where: { id },
-    });
+  async remove(id: number) {
+    await this.findOne(id); // Garante que existe
+
+    return this.prisma.grupo.delete({ where: { id } });
+  }
+
+  // Helper para calcular totais e disponibilidade
+  private formatarGrupo(grupo: any) {
+    const todosVeiculos = grupo.modelos.flatMap(modelo => modelo.veiculos);
+    const totalFrota = todosVeiculos.length;
+    
+    // Disponível se não tiver reservas ativas
+    const disponiveis = todosVeiculos.filter(v => v.reservas.length === 0).length;
+
+    return {
+      id: grupo.id,
+      descricao: grupo.descricao,
+      valorDiaria: grupo.valorDiaria,
+      totalFrota,
+      disponiveis,
+      modelos: grupo.modelos.map(m => ({
+        id: m.id,
+        descricao: m.descricao,
+        marca: m.marca
+      }))
+    };
   }
 }
