@@ -1,27 +1,69 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
 # Bumblebee API 🚗🤖
 
-Backend do sistema de aluguel de carros e gestão de frotas **Bumblebee**. 
+Backend do sistema de aluguel de carros e gestão de frotas **Bumblebee**.  
 Esta API RESTful gerencia todo o fluxo de veículos, clientes, categorias e reservas.
+
+---
 
 ## 🛠 Tecnologias Utilizadas
 
-Este projeto foi construído com uma stack robusta e moderna:
+- NestJS — Framework Node.js progressivo para aplicações server-side.
+- Prisma ORM — ORM moderno para Node.js e TypeScript.
+- SQLite — Banco de dados leve baseado em arquivo.
+- Swagger (OpenAPI) — Documentação automática e interativa.
+- TypeScript — Tipagem estática para desenvolvimento seguro.
 
-* **[NestJS](https://nestjs.com/)**: Framework Node.js progressivo para construção de aplicações server-side eficientes e escaláveis.
-* **[Prisma ORM](https://www.prisma.io/)**: ORM de última geração para Node.js e TypeScript, facilitando a interação com o banco de dados.
-* **[SQLite](https://www.sqlite.org/index.html)**: Banco de dados relacional SQL, leve e baseado em arquivo (ideal para desenvolvimento rápido).
-* **[Swagger](https://swagger.io/)** (OpenAPI): Documentação automática e interativa das rotas da API.
-* **TypeScript**: Linguagem base, garantindo tipagem estática e segurança no desenvolvimento.
+---
 
 ## ⚙️ Instalação e Configuração
 
-Siga os passos abaixo para rodar a API localmente:
-
 ### 1. Instalar dependências
+npm install
 
-```bash
-$ npm install
+### 2. Configurar o Banco de Dados  
+O projeto utiliza SQLite; o arquivo `dev.db` será criado automaticamente.
+
+Criar e aplicar as migrations:  
+npx prisma migrate dev --name init
+
+Opcional — abrir o Prisma Studio:  
+npx prisma studio
+
+### 3. Popular o Banco (Seed)
+npm run db:seed
+
+---
+
+## ▶️ Executando a Aplicação
+
+Modo desenvolvimento (auto-reload):  
+npm run start:dev
+
+Modo produção:  
+npm run start:prod
+
+A API estará disponível em:  
+http://localhost:3000
+
+---
+
+## 📚 Documentação da API
+
+Acesse o Swagger em:  
+http://localhost:3000/api
+
+---
+
+## 🧪 Testes
+
+Rodar testes unitários:  
+npm run test
+
+Cobertura de testes:  
+npm run test:cov
+
+---
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT.

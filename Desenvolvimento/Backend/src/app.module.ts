@@ -3,6 +3,7 @@ import { GruposModule } from './grupos/grupos.module';
 import { VeiculosModelosModule } from './veiculos-modelos/veiculos-modelos.module';
 import { VeiculosModule } from './veiculos/veiculos.module';
 import { ClientesModule } from './clientes/clientes.module';
+import { ReservasModule } from './reservas/reservas.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { ClientesModule } from './clientes/clientes.module';
     VeiculosModelosModule,
     VeiculosModule,
     ClientesModule,
+    ReservasModule,
   ],
   controllers: [],
   providers: [],
