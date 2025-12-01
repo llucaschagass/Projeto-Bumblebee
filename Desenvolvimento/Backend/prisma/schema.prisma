@@ -1,9 +1,84 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+// 1. Tabela de Grupos
+model Grupo {
+  id          Int      @id @default(autoincrement())
+  descricao   String   // Ex: "Grupo A - Econômico"
+  valorDiaria Float    // Ex: 120.00
+  inseridoEm  DateTime @default(now())
+
+  // Relacionamento: Um grupo tem vários modelos
+  modelos     VeiculoModelo[]
+}
+
+// 2. Tabela de Modelos
+model VeiculoModelo {
+  id          Int      @id @default(autoincrement())
+  descricao   String   // Ex: "Hyundai HB20 1.0 Sense"
+  marca       String   // Ex: "Hyundai"
+  inseridoEm  DateTime @default(now())
+
+  // Foreign Key (Código do Grupo)
+  grupoId     Int
+  grupo       Grupo    @relation(fields: [grupoId], references: [id])
+
+  // Relacionamento: Um modelo tem vários veículos físicos
+  veiculos    Veiculo[]
+}
+
+// 3. Tabela de Veículos
+model Veiculo {
+  id               Int      @id @default(autoincrement())
+  placa            String   @unique
+  chassi           String   @unique
+  renavam          String   @unique
+  fabricacaoModelo String   // Ex: "2024/2025"
+  cor              String
+  km               Int      @default(0)
+  inseridoEm       DateTime @default(now())
+
+  // Foreign Key (Código do Modelo)
+  modeloId         Int
+  modelo           VeiculoModelo @relation(fields: [modeloId], references: [id])
+
+  // Relacionamento: Um veículo pode ter várias reservas
+  reservas         Reserva[]
+}
+
+// 4. Tabela de Clientes
+model Cliente {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  email       String   @unique
+  cpfCnpj     String   @unique
+  telefone    String?
+  inseridoEm  DateTime @default(now())
+
+  // Relacionamento: Um cliente faz várias reservas
+  reservas    Reserva[]
+}
+
+// 5. Tabela de Reservas
+model Reserva {
+  id            Int      @id @default(autoincrement())
+  dataInicio    DateTime
+  dataFim       DateTime
+  status        String   @default("ATIVA") // ATIVA, CONCLUIDA, CANCELADA
+  valorTotal    Float?
+  inseridoEm    DateTime @default(now())
+
+  // Foreign Key (Código do Cliente)
+  clienteId     Int
+  cliente       Cliente  @relation(fields: [clienteId], references: [id])
+
+  // Foreign Key (Código do Veículo que foi alugado)
+  veiculoId     Int
+  veiculo       Veiculo  @relation(fields: [veiculoId], references: [id])
 }
