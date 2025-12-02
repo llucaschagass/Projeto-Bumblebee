@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { GruposService } from './grupos.service';
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { UpdateGrupoDto } from './dto/update-grupo.dto';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+
 
 @ApiTags('Grupos')
 @Controller('grupos')
@@ -19,6 +20,17 @@ export class GruposController {
   @ApiOperation({ summary: 'Lista todas as categorias e seus modelos' })
   findAll() {
     return this.gruposService.findAll();
+  }
+
+  @Get('disponibilidade')
+  @ApiOperation({ summary: 'Pesquisa grupos disponíveis por período' })
+  @ApiQuery({ name: 'inicio', required: true, type: String })
+  @ApiQuery({ name: 'fim', required: true, type: String })
+  findDisponiveis(
+    @Query('inicio') inicio: string, 
+    @Query('fim') fim: string
+  ) {
+    return this.gruposService.findDisponiveis(inicio, fim);
   }
 
   @Get(':id')

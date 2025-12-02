@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { UpdateGrupoDto } from './dto/update-grupo.dto';
 import { PrismaService } from '../prisma.service';
@@ -14,7 +14,21 @@ export class GruposService {
   }
 
   async findAll() {
-    // Busca grupos com hierarquia completa para cálculos
+    const grupos = await this.prisma.grupo.findMany({
+      orderBy: { id: 'asc' },
+      include: { modelos: true }
+    });
+    return grupos; 
+  }
+
+  async findDisponiveis(inicioString: string, fimString: string) {
+    if (!inicioString || !fimString) {
+      throw new BadRequestException('As datas de inicio e fim são obrigatórias para verificar disponibilidade.');
+    }
+
+    const inicio = new Date(inicioString);
+    const fim = new Date(fimString);
+
     const grupos = await this.prisma.grupo.findMany({
       orderBy: { id: 'asc' },
       include: {
@@ -25,8 +39,8 @@ export class GruposService {
                 reservas: {
                   where: {
                     status: 'ATIVA',
-                    dataInicio: { lte: new Date() },
-                    dataFim: { gte: new Date() }
+                    dataInicio: { lt: fim },
+                    dataFim: { gt: inicio }
                   }
                 }
               }
