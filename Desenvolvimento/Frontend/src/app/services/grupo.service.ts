@@ -14,4 +14,8 @@ export class GrupoService {
   listar(): Observable<Grupo[]> {
     return this.http.get<Grupo[]>(this.apiUrl);
   }
+
+  obterPorId(id: number): Observable<Grupo> {
+    return this.http.get<Grupo>(`${this.apiUrl}/${id}`);
+  }
 }
