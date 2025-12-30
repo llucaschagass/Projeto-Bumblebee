@@ -1,3 +1,9 @@
-<app-header></app-header>
+<div class="flex flex-col min-h-screen relative">
+    <app-header></app-header>
 
-<router-outlet></router-outlet>
+    <div class="flex-grow relative z-0">
+        <router-outlet></router-outlet>
+    </div>
+
+    <app-footer class="relative z-10"></app-footer>
+</div>
